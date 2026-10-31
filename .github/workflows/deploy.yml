@@ -1,0 +1,33 @@
+name: Deploy to Vercel
+
+# main への push で本番デプロイ。
+# リポジトリの Settings > Secrets and variables > Actions に
+# VERCEL_TOKEN / VERCEL_ORG_ID / VERCEL_PROJECT_ID を登録すると有効になる。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Skip when Vercel secrets are not configured
+        if: env.VERCEL_TOKEN == ''
+        run: echo "VERCEL_TOKEN is not set. Skipping deploy." && exit 0
+      - uses: actions/checkout@v4
+        if: env.VERCEL_TOKEN != ''
+      - uses: actions/setup-node@v4
+        if: env.VERCEL_TOKEN != ''
+        with:
+          node-version: 22
+      - name: Deploy
+        if: env.VERCEL_TOKEN != ''
+        run: |
+          npx vercel@latest pull --yes --environment=production --token="$VERCEL_TOKEN"
+          npx vercel@latest build --prod --token="$VERCEL_TOKEN"
+          npx vercel@latest deploy --prebuilt --prod --token="$VERCEL_TOKEN"
