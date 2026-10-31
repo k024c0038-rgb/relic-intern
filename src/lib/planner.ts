@@ -13,6 +13,8 @@ import {
 } from "@/lib/google";
 import { SEARCH_RADIUS, type Candidate, type PlanRequest, type SpotCategory, type Transport } from "@/lib/types";
 import { addMinutes, distanceMeters, toMinutes } from "@/lib/utils";
+import { isMockAi } from "@/lib/mock/config";
+import { mockCourses, mockPlan } from "@/lib/mock/ai";
 
 const LANGUAGE_NAME = { ja: "日本語", zh: "简体中文", en: "English" } as const;
 const TRANSPORT_NAME = { walk: "徒歩", transit: "電車・バス", car: "車" } as const;
@@ -182,6 +184,9 @@ function validatePlan(plan: AiPlan, candidates: Candidate[], req: PlanRequest) {
 }
 
 export async function askAiForPlan(req: PlanRequest, candidates: Candidate[], centers: { lat: number; lng: number }[]) {
+  // Claude API のキーがない場合は、ルールでプランを組み立てる（デモモード）
+  if (isMockAi()) return mockPlan(req, candidates, centers);
+
   const system = `あなたは日本旅行のプランナーです。ユーザーの条件に合わせて、効率よく回れる1日ごとのスケジュールを作ります。
 
 厳守するルール:
@@ -412,21 +417,23 @@ export async function suggestCourses(
     days: 1,
   });
   const ids = new Set(candidates.map((c) => c.placeId));
-  const result = await generateJson({
-    schema: AiCourseSchema,
-    effort: "low",
-    system: `あなたは日本旅行のプランナーです。メイン観光地を中心にした「半日コース（half_day、約4時間）」と「1日コース（full_day、約8時間）」を1つずつ作ります。
+  const result = isMockAi()
+    ? { courses: mockCourses(candidates, language) }
+    : await generateJson({
+        schema: AiCourseSchema,
+        effort: "low",
+        system: `あなたは日本旅行のプランナーです。メイン観光地を中心にした「半日コース（half_day、約4時間）」と「1日コース（full_day、約8時間）」を1つずつ作ります。
 - スポットは必ず候補リストの中からだけ選び、place_id はそのまま使うこと。
 - どちらのコースにも is_main のスポットを必ず含めること。
 - 移動が少ない順番にし、1日コースには昼食（category=food）を入れること。宿（stay）は入れないこと。
 - title と note は ${LANGUAGE_NAME[language]} で書くこと。`,
-    messages: [
-      {
-        role: "user",
-        content: JSON.stringify({ transport: TRANSPORT_NAME[transport], candidates: candidatesForPrompt(candidates, centers[0]) }),
-      },
-    ],
-  });
+        messages: [
+          {
+            role: "user",
+            content: JSON.stringify({ transport: TRANSPORT_NAME[transport], candidates: candidatesForPrompt(candidates, centers[0]) }),
+          },
+        ],
+      });
   const byId = new Map(candidates.map((c) => [c.placeId, c]));
   return result.courses.map((course) => {
     const spots = course.spots.filter((s) => ids.has(s.place_id));

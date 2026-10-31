@@ -3,6 +3,8 @@ import { z } from "zod";
 import { generateJson } from "@/lib/ai";
 import { getUser } from "@/lib/supabase/server";
 import { LOCALES } from "@/lib/types";
+import { isMockAi } from "@/lib/mock/config";
+import { mockTranslate } from "@/lib/mock/ai";
 
 export const maxDuration = 60;
 
@@ -27,6 +29,11 @@ export async function POST(request: NextRequest) {
     .eq("id", parsed.data.postId)
     .maybeSingle();
   if (!post) return NextResponse.json({ error: "not_found" }, { status: 404 });
+
+  if (isMockAi()) {
+    const { language: _language, ...text } = post;
+    return NextResponse.json({ translation: mockTranslate(text, parsed.data.target) });
+  }
 
   try {
     const translation = await generateJson({

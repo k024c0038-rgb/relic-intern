@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { PlaceAutocomplete } from "@/components/place-autocomplete";
 import { createPost, type PostInput } from "@/app/posts/new/actions";
 import { uploadOriginalPhoto } from "@/lib/upload";
+import { MOCK_SUPABASE } from "@/lib/mock/config";
 import { POST_TYPES, TRANSPORTS, type Locale, type PostType, type Transport } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -255,8 +256,9 @@ export function PostForm({
 
           <div className="space-y-2">
             <Label htmlFor="photos">{t("photos")}</Label>
-            <p className="text-xs text-muted-foreground">{t("photosHelp")}</p>
+            <p className="text-xs text-muted-foreground">{MOCK_SUPABASE ? tc("demoPhotos") : t("photosHelp")}</p>
             <Input
+              disabled={MOCK_SUPABASE}
               id="photos"
               type="file"
               multiple

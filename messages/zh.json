@@ -16,8 +16,17 @@
     "noPhoto": "暂无照片",
     "loginRequired": "此操作需要登录",
     "rating": "评分 {rating}",
-    "category": { "sightseeing": "观光", "food": "餐饮", "stay": "住宿", "other": "其他" },
-    "transport": { "walk": "步行", "transit": "电车・巴士", "car": "自驾" },
+    "category": {
+      "sightseeing": "观光",
+      "food": "餐饮",
+      "stay": "住宿",
+      "other": "其他"
+    },
+    "transport": {
+      "walk": "步行",
+      "transit": "电车・巴士",
+      "car": "自驾"
+    },
     "preference": {
       "nature": "自然",
       "gourmet": "美食",
@@ -28,8 +37,20 @@
       "onsen": "温泉",
       "nightview": "夜景"
     },
-    "postType": { "all": "全部", "food": "美食", "stay": "住宿", "route": "路线" },
-    "language": { "ja": "日本語", "zh": "中文", "en": "English" }
+    "postType": {
+      "all": "全部",
+      "food": "美食",
+      "stay": "住宿",
+      "route": "路线"
+    },
+    "language": {
+      "ja": "日本語",
+      "zh": "中文",
+      "en": "English"
+    },
+    "demoBanner": "演示模式：未连接 {services}，正在使用示例数据运行。目的地可尝试“京都・东京・大阪・金泽・札幌”。创建的数据只保存在此浏览器中。",
+    "demoPhotos": "演示模式下无法上传照片（连接 Supabase 后可用）",
+    "demoMap": "简易地图（演示模式）"
   },
   "home": {
     "title": "想去哪里？",
@@ -103,7 +124,11 @@
     "region": "地区",
     "regionPlaceholder": "例：京都",
     "search": "筛选",
-    "sort": { "new": "最新", "popular": "最受欢迎", "value": "性价比" },
+    "sort": {
+      "new": "最新",
+      "popular": "最受欢迎",
+      "value": "性价比"
+    },
     "empty": "还没有分享",
     "likes": "♥ {n}"
   },
@@ -168,6 +193,8 @@
     "email": "邮箱地址",
     "send": "发送登录链接",
     "sent": "邮件已发送，请打开链接登录。",
-    "displayName": "昵称"
+    "displayName": "昵称",
+    "demo": "演示模式下无需登录，已作为“演示用户”使用。",
+    "backHome": "返回首页"
   }
 }

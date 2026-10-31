@@ -16,8 +16,17 @@
     "noPhoto": "写真がありません",
     "loginRequired": "この操作にはログインが必要です",
     "rating": "評価 {rating}",
-    "category": { "sightseeing": "観光", "food": "飲食", "stay": "宿泊", "other": "その他" },
-    "transport": { "walk": "徒歩", "transit": "電車・バス", "car": "車" },
+    "category": {
+      "sightseeing": "観光",
+      "food": "飲食",
+      "stay": "宿泊",
+      "other": "その他"
+    },
+    "transport": {
+      "walk": "徒歩",
+      "transit": "電車・バス",
+      "car": "車"
+    },
     "preference": {
       "nature": "自然",
       "gourmet": "グルメ",
@@ -28,8 +37,20 @@
       "onsen": "温泉",
       "nightview": "夜景"
     },
-    "postType": { "all": "すべて", "food": "グルメ", "stay": "宿", "route": "ルート" },
-    "language": { "ja": "日本語", "zh": "中文", "en": "English" }
+    "postType": {
+      "all": "すべて",
+      "food": "グルメ",
+      "stay": "宿",
+      "route": "ルート"
+    },
+    "language": {
+      "ja": "日本語",
+      "zh": "中文",
+      "en": "English"
+    },
+    "demoBanner": "デモモード：{services} に接続せず、サンプルデータで動いています。行き先は「京都・東京・大阪・金沢・札幌」で試せます。作ったデータはこのブラウザにだけ保存されます。",
+    "demoPhotos": "デモモードでは写真をアップロードできません（Supabase に接続すると使えます）",
+    "demoMap": "簡易マップ（デモモード）"
   },
   "home": {
     "title": "どこへ行きますか？",
@@ -103,7 +124,11 @@
     "region": "地域",
     "regionPlaceholder": "例：京都",
     "search": "絞り込む",
-    "sort": { "new": "新着順", "popular": "人気順", "value": "コスパ順" },
+    "sort": {
+      "new": "新着順",
+      "popular": "人気順",
+      "value": "コスパ順"
+    },
     "empty": "まだ投稿がありません",
     "likes": "♥ {n}"
   },
@@ -168,6 +193,8 @@
     "email": "メールアドレス",
     "send": "ログインリンクを送信",
     "sent": "メールを送信しました。リンクを開いてログインしてください。",
-    "displayName": "表示名"
+    "displayName": "表示名",
+    "demo": "デモモードのため、ログインしなくても「デモユーザー」として使えます。",
+    "backHome": "トップへ戻る"
   }
 }
