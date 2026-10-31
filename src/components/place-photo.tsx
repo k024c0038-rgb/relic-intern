@@ -20,7 +20,7 @@ export function PlacePhoto({
   const t = useTranslations("common");
   if (!photo) {
     return (
-      <div className={cn("grid aspect-[4/3] place-items-center bg-muted text-xs text-muted-foreground", className)}>
+      <div className={cn("grid h-16 place-items-center bg-muted text-xs text-muted-foreground sm:h-auto sm:min-h-24", className)}>
         {t("noPhoto")}
       </div>
     );

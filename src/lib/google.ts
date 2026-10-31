@@ -1,11 +1,14 @@
 import "server-only";
 import type { SpotCategory, Transport } from "@/lib/types";
 import { distanceMeters } from "@/lib/utils";
+import { isMockGoogle } from "@/lib/mock/config";
+import { mockAutocomplete, mockGetPlace, mockNearbySearch, mockTextSearch } from "@/lib/mock/places";
 
 /**
  * Google Places API (New) / Routes API のサーバー側ラッパー。
  * APIキーをブラウザに出さないため、必ずサーバー（Route Handler / Server Component）から呼ぶ。
  * 規約上、緯度・経度・写真はDBに保存しない。fetch のキャッシュは短時間のみ。
+ * GOOGLE_MAPS_SERVER_KEY がない場合は、内蔵のスポットデータ（src/lib/mock/places.ts）で動く。
  */
 
 const PLACES_BASE = "https://places.googleapis.com/v1";
@@ -79,6 +82,7 @@ async function placesFetch<T>(path: string, init: { method?: string; body?: unkn
 const languageCode = (lang: string) => (lang === "zh" ? "zh-CN" : lang);
 
 export async function autocomplete(input: string, lang: string, sessionToken?: string) {
+  if (isMockGoogle()) return mockAutocomplete(input, lang);
   const data = await placesFetch<{
     suggestions?: {
       placePrediction?: {
@@ -103,6 +107,7 @@ export async function autocomplete(input: string, lang: string, sessionToken?: s
 }
 
 export async function getPlace(placeId: string, lang: string) {
+  if (isMockGoogle()) return mockGetPlace(placeId, lang);
   return placesFetch<Place>(`/places/${encodeURIComponent(placeId)}?languageCode=${languageCode(lang)}`, {
     method: "GET",
     fieldMask: DETAIL_FIELDS.join(","),
@@ -117,6 +122,7 @@ export async function getPlaces(placeIds: string[], lang: string) {
 }
 
 export async function textSearch(query: string, lang: string, max = 20) {
+  if (isMockGoogle()) return mockTextSearch(query, lang, max);
   const data = await placesFetch<{ places?: Place[] }>("/places:searchText", {
     body: { textQuery: query, languageCode: languageCode(lang), pageSize: max, regionCode: "jp" },
     fieldMask: LIST_FIELDS.map((f) => `places.${f}`).join(","),
@@ -137,6 +143,7 @@ export async function nearbySearch(
   lang: string,
   max = 20,
 ) {
+  if (isMockGoogle()) return mockNearbySearch(center, radius, category, lang, max);
   const data = await placesFetch<{ places?: Place[] }>("/places:searchNearby", {
     body: {
       includedTypes: CATEGORY_TYPES[category],
@@ -180,6 +187,7 @@ export function latLng(p: Place) {
 
 /** 写真の実体URLを取得（Googleの写真は保存せず、表示のたびに取得する） */
 export async function getPhotoUri(photoName: string, maxWidthPx = 800) {
+  if (isMockGoogle()) return null;
   const res = await fetch(
     `${PLACES_BASE}/${photoName}/media?maxWidthPx=${maxWidthPx}&skipHttpRedirect=true&key=${key()}`,
     { next: { revalidate: 3600 } },
@@ -209,6 +217,7 @@ export async function computeTravelMinutes(
   transport: Transport,
   departureTime?: Date,
 ) {
+  if (isMockGoogle()) return { minutes: estimateTravelMinutes(origin, destination, transport), estimated: true };
   try {
     const body: Record<string, unknown> = {
       origin: { location: { latLng: { latitude: origin.lat, longitude: origin.lng } } },
@@ -246,6 +255,7 @@ export async function computeTravelMatrix(
 ) {
   const result: (number | null)[] = destinations.map(() => null);
   if (destinations.length === 0) return result;
+  if (isMockGoogle()) return destinations.map((d) => estimateTravelMinutes(origin, d, transport));
   try {
     const res = await fetch(`${ROUTES_BASE}/distanceMatrix/v2:computeRouteMatrix`, {
       method: "POST",

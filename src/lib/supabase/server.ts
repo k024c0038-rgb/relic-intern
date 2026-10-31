@@ -1,8 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { MOCK_SUPABASE } from "@/lib/mock/config";
+import { createMockClient } from "@/lib/mock/db";
 
-export async function createClient() {
-  const cookieStore = await cookies();
+type CookieStore = Awaited<ReturnType<typeof cookies>>;
+
+function createSupabaseClient(cookieStore: CookieStore) {
   return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
     cookies: {
       getAll() {
@@ -17,6 +20,13 @@ export async function createClient() {
       },
     },
   });
+}
+
+export async function createClient() {
+  const cookieStore = await cookies();
+  // Supabase のキーがない場合はデモ用の簡易DBで動かす
+  if (MOCK_SUPABASE) return createMockClient(cookieStore) as unknown as ReturnType<typeof createSupabaseClient>;
+  return createSupabaseClient(cookieStore);
 }
 
 export async function getUser() {

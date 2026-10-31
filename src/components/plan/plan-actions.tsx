@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { publishPlan, recordSpotPhoto, savePlan } from "@/app/plan/[id]/actions";
 import { uploadOriginalPhoto } from "@/lib/upload";
+import { MOCK_SUPABASE } from "@/lib/mock/config";
 
 export function PlanActions({
   planId,
@@ -103,26 +104,32 @@ export function PlanActions({
       <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-background p-3">
         <Camera className="size-4 text-muted-foreground" />
         <span className="text-sm font-medium">{t("addPhoto")}</span>
-        <Select className="w-auto max-w-56" value={spotId} onChange={(e) => setSpotId(e.target.value)}>
-          {spots.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.label}
-            </option>
-          ))}
-        </Select>
-        <label className="cursor-pointer">
-          <input
-            type="file"
-            accept="image/jpeg,image/png,image/heic,image/heif,image/webp"
-            multiple
-            className="hidden"
-            disabled={uploading}
-            onChange={(e) => onFiles(e.target.files)}
-          />
-          <span className="inline-flex h-8 items-center rounded-md border px-3 text-xs hover:bg-muted">
-            {uploading ? t("uploading") : "📷 JPG / HEIC"}
-          </span>
-        </label>
+        {MOCK_SUPABASE ? (
+          <span className="text-xs text-muted-foreground">{tc("demoPhotos")}</span>
+        ) : (
+          <>
+            <Select className="w-auto max-w-56" value={spotId} onChange={(e) => setSpotId(e.target.value)}>
+              {spots.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.label}
+                </option>
+              ))}
+            </Select>
+            <label className="cursor-pointer">
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/heic,image/heif,image/webp"
+                multiple
+                className="hidden"
+                disabled={uploading}
+                onChange={(e) => onFiles(e.target.files)}
+              />
+              <span className="inline-flex h-8 items-center rounded-md border px-3 text-xs hover:bg-muted">
+                {uploading ? t("uploading") : "📷 JPG / HEIC"}
+              </span>
+            </label>
+          </>
+        )}
       </div>
 
       {message && <p className="text-sm text-muted-foreground">{message}</p>}

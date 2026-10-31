@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { MOCK_SUPABASE } from "@/lib/mock/config";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -37,7 +39,14 @@ export function LoginForm() {
         <CardTitle>{t("title")}</CardTitle>
       </CardHeader>
       <CardContent>
-        {state === "sent" ? (
+        {MOCK_SUPABASE ? (
+          <div className="space-y-4 text-sm">
+            <p>{t("demo")}</p>
+            <Button asChild className="w-full">
+              <Link href={next}>{t("backHome")}</Link>
+            </Button>
+          </div>
+        ) : state === "sent" ? (
           <p className="text-sm">{t("sent")}</p>
         ) : (
           <form onSubmit={submit} className="space-y-4">

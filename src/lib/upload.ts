@@ -2,12 +2,15 @@
 
 import exifr from "exifr";
 import { createClient } from "@/lib/supabase/client";
+import { MOCK_SUPABASE } from "@/lib/mock/config";
 
 /**
  * 撮影したままの写真を Supabase Storage に保存する。
  * リサイズ・圧縮・フィルターなどの加工は一切しない。撮影日時は EXIF から取得する。
  */
 export async function uploadOriginalPhoto(file: File, folder: string) {
+  // デモモードでは保存先（Supabase Storage）がないため受け付けない
+  if (MOCK_SUPABASE) throw new Error("demo_mode");
   const supabase = createClient();
   const {
     data: { user },

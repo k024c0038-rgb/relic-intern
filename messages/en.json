@@ -16,8 +16,17 @@
     "noPhoto": "No photo",
     "loginRequired": "Please log in to do this",
     "rating": "Rating {rating}",
-    "category": { "sightseeing": "Sightseeing", "food": "Food", "stay": "Stay", "other": "Other" },
-    "transport": { "walk": "Walking", "transit": "Train / Bus", "car": "Car" },
+    "category": {
+      "sightseeing": "Sightseeing",
+      "food": "Food",
+      "stay": "Stay",
+      "other": "Other"
+    },
+    "transport": {
+      "walk": "Walking",
+      "transit": "Train / Bus",
+      "car": "Car"
+    },
     "preference": {
       "nature": "Nature",
       "gourmet": "Food",
@@ -28,8 +37,20 @@
       "onsen": "Hot springs",
       "nightview": "Night views"
     },
-    "postType": { "all": "All", "food": "Food", "stay": "Stay", "route": "Route" },
-    "language": { "ja": "日本語", "zh": "中文", "en": "English" }
+    "postType": {
+      "all": "All",
+      "food": "Food",
+      "stay": "Stay",
+      "route": "Route"
+    },
+    "language": {
+      "ja": "日本語",
+      "zh": "中文",
+      "en": "English"
+    },
+    "demoBanner": "Demo mode: running on sample data without {services}. Try Kyoto, Tokyo, Osaka, Kanazawa or Sapporo as a destination. Your data is saved only in this browser.",
+    "demoPhotos": "Photo uploads are disabled in demo mode (connect Supabase to enable them)",
+    "demoMap": "Simple map (demo mode)"
   },
   "home": {
     "title": "Where are you going?",
@@ -103,7 +124,11 @@
     "region": "Region",
     "regionPlaceholder": "e.g. Kyoto",
     "search": "Filter",
-    "sort": { "new": "Newest", "popular": "Most liked", "value": "Best value" },
+    "sort": {
+      "new": "Newest",
+      "popular": "Most liked",
+      "value": "Best value"
+    },
     "empty": "No posts yet",
     "likes": "♥ {n}"
   },
@@ -168,6 +193,8 @@
     "email": "Email",
     "send": "Send login link",
     "sent": "Email sent. Open the link to log in.",
-    "displayName": "Display name"
+    "displayName": "Display name",
+    "demo": "In demo mode you're already signed in as the demo user.",
+    "backHome": "Back to home"
   }
 }
